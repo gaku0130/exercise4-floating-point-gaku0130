@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Quarto build outputs
+*.html
+*_files/
+.quarto/
+*.quarto_ipynb*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/

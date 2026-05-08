@@ -1,0 +1,106 @@
+---
+title: "Exercise 4.2 — Verify Norm Inequalities Numerically"
+subtitle: "Numerical Analysis 2026 — Lecture 4"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-tools: true
+    highlight-style: github
+execute:
+  echo: true
+  warning: false
+jupyter: python3
+---
+
+## Problem
+
+Confirm the following norm inequalities numerically using random vectors:
+
+$$
+\|x\|_2 \leq \|x\|_1 \leq \sqrt{n}\,\|x\|_2,
+\tag{5}
+$$
+
+$$
+\|x\|_\infty \leq \|x\|_1 \leq n\,\|x\|_\infty,
+\tag{6}
+$$
+
+$$
+\|x\|_\infty \leq \|x\|_2 \leq \sqrt{n}\,\|x\|_\infty.
+\tag{7}
+$$
+
+Use random vectors in several dimensions, for example
+`n = 2, 5, 10, 50`.
+
+---
+
+## 1. Verification function
+
+Complete the function below.
+
+```{python}
+import numpy as np
+from numpy import linalg as LA
+
+def verify_norm_inequalities(n_dims, n_tests=100, seed=2026):
+    """
+    Verify inequalities (5), (6), and (7) for random vectors.
+
+    Parameters
+    ----------
+    n_dims : int
+        Dimension of the random vectors.
+    n_tests : int
+        Number of random vectors to test.
+    seed : int
+        Random seed for reproducibility.
+
+    Returns
+    -------
+    bool
+        True if all tests pass, False otherwise.
+    """
+    rng = np.random.default_rng(seed)
+
+    # TODO:
+    # 1. Generate n_tests random vectors x in R^n.
+    # 2. Compute ||x||_1, ||x||_2, and ||x||_inf.
+    # 3. Check inequalities (5), (6), and (7).
+    # 4. Return True only if all tests pass.
+
+    pass
+```
+
+---
+
+## 2. Run experiments
+
+Run your function for several dimensions and report the result.
+
+```{python}
+# TODO: run your verification for several dimensions.
+# Example:
+# for n in [2, 5, 10, 50]:
+#     ok = verify_norm_inequalities(n_dims=n, n_tests=1000)
+#     print(n, ok)
+```
+
+---
+
+## 3. Explanation
+
+Explain what your numerical experiment confirms.
+
+> **Your answer:**
+>
+> *(write here)*
+
+Also explain why a numerical experiment is useful even though it is not a
+mathematical proof.
+
+> **Your answer:**
+>
+> *(write here)*

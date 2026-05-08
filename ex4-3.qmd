@@ -1,0 +1,175 @@
+---
+title: "Exercise 4.3 — Random Search for Matrix Norms"
+subtitle: "Numerical Analysis 2026 — Lecture 4"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-tools: true
+    highlight-style: github
+execute:
+  echo: true
+  warning: false
+jupyter: python3
+---
+
+## Problem
+
+Estimate the induced matrix norm $\|A\|_p$ from below by sampling random
+vectors.
+
+AI use is allowed, but you must verify and explain the results yourself.
+
+You should:
+
+1. Choose at least **two** matrices $A$. Include one $2 \times 2$ example
+   for geometric discussion.
+2. For $p = 1, 2, \infty$, sample many nonzero vectors and compute
+   $r_p(x)=\|Ax\|_p/\|x\|_p$.
+3. For one $2 \times 2$ matrix, try several sample sizes, e.g.
+   `N = 10, 100, 1000, 10000`; report the sampled maximum, true value,
+   and relative gap.
+4. Compare the sampled maximum with the true value: is it above, below,
+   or equal? Explain your answer. Then discuss why one case is close and
+   another case is not.
+
+---
+
+## 1. Random-search function
+
+Complete the function below.
+
+```{python}
+import numpy as np
+from numpy import linalg as LA
+
+def estimate_induced_norm(A, p, n_samples=1000, seed=2026):
+    """
+    Estimate ||A||_p by random sampling.
+
+    Parameters
+    ----------
+    A : numpy.ndarray
+        Matrix.
+    p : int or float
+        Norm parameter: 1, 2, or np.inf.
+    n_samples : int
+        Number of random vectors.
+    seed : int
+        Random seed for reproducibility.
+
+    Returns
+    -------
+    estimate : float
+        Largest sampled value of ||Ax||_p / ||x||_p.
+    best_x : numpy.ndarray
+        Vector that gave the largest sampled value.
+    """
+    rng = np.random.default_rng(seed)
+    A = np.asarray(A, dtype=float)
+    n = A.shape[1]
+
+    # TODO:
+    # 1. Generate n_samples random nonzero vectors x in R^n.
+    # 2. Compute ratio = ||A x||_p / ||x||_p.
+    # 3. Keep the largest ratio and the corresponding x.
+    # 4. Return (estimate, best_x).
+
+    pass
+```
+
+---
+
+## 2. Main experiment
+
+Choose at least two matrices and run the estimator for
+$p = 1, 2, \infty$.
+
+```{python}
+# TODO: choose your matrices.
+A1 = np.array([
+    [2.0, 1.0],
+    [0.0, 1.0],
+])
+
+A2 = np.array([
+    # TODO: choose another matrix
+])
+
+# TODO: run estimate_induced_norm(A, p, n_samples=...)
+# and compare with LA.norm(A, ord=p).
+```
+
+Create a small table with your results.
+
+> **Your table / summary:**
+>
+> *(write here)*
+
+---
+
+## 3. Sample-size study
+
+For one $2 \times 2$ matrix, try several sample sizes, for example:
+
+```{python}
+sample_sizes = [10, 100, 1000, 10000]
+```
+
+For each sample size, report:
+
+- sampled maximum,
+- true value from `numpy.linalg.norm`,
+- relative gap.
+
+```{python}
+# TODO: run the sample-size study.
+```
+
+> **Your table / summary:**
+>
+> *(write here)*
+
+---
+
+## 4. Discussion
+
+Compare the sampled maximum with the true value: is it above, below, or
+equal? Explain your answer.
+
+> **Your answer:**
+>
+> *(write here)*
+
+Discuss why one case is close and another case is not.
+
+> **Your answer:**
+>
+> *(write here)*
+
+---
+
+## 5. Optional Challenge
+
+For $p = 2$, do the following extra analysis for one $2 \times 2$ matrix:
+
+$$
+\|A\|_2 = \sqrt{\lambda_{\max}(A^T A)}.
+$$
+
+Tasks:
+
+1. Compute $\lambda_{\max}(A^T A)$ and confirm that it gives the same value
+   as `numpy.linalg.norm(A, ord=2)`.
+2. Compute an eigenvector $v_{\max}$ of $A^T A$ for $\lambda_{\max}$, and
+   check the stretch ratio $\|Av_{\max}\|_2 / \|v_{\max}\|_2$.
+3. Compare $v_{\max}$ with the best direction found by your random search.
+4. Briefly explain why this direction gives the maximum stretching factor.
+
+```{python}
+# TODO (optional): eigenvalue / eigenvector analysis for p = 2.
+```
+
+> **Optional challenge answer:**
+>
+> *(write here)*

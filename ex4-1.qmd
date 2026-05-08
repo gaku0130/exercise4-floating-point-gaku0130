@@ -1,0 +1,123 @@
+---
+title: "Exercise 4.1 — Prove the Standard Vector Norms Are Norms"
+subtitle: "Numerical Analysis 2026 — Lecture 4"
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-tools: true
+    highlight-style: github
+execute:
+  echo: true
+  warning: false
+jupyter: python3
+---
+
+## Problem
+
+Prove that the following three functions are vector norms on
+$\mathbb{R}^n$:
+
+$$
+\|x\|_1 = \sum_{i=1}^{n} |x_i|,
+\qquad
+\|x\|_2 = \left(\sum_{i=1}^{n} |x_i|^2\right)^{1/2},
+\qquad
+\|x\|_\infty = \max_{1 \leq i \leq n}|x_i|.
+$$
+
+For each norm, verify the three norm properties:
+
+1. Positivity:
+   $$
+   \|x\| \geq 0,\qquad \|x\| = 0 \Longleftrightarrow x = 0.
+   $$
+2. Homogeneity:
+   $$
+   \|\alpha x\| = |\alpha|\|x\|.
+   $$
+3. Triangle inequality:
+   $$
+   \|x+y\| \leq \|x\|+\|y\|.
+   $$
+
+::: {.callout-warning}
+AI is **not recommended** for the proof itself. You may use AI to convert
+your handwritten equations into LaTeX, but the mathematical reasoning
+should be yours.
+:::
+
+---
+
+## 1. Proof for $\ell^1$
+
+### Positivity
+
+> **Your answer:**
+>
+> *(write here)*
+
+### Homogeneity
+
+> **Your answer:**
+>
+> *(write here)*
+
+### Triangle inequality
+
+> **Your answer:**
+>
+> *(write here)*
+
+---
+
+## 2. Proof for $\ell^2$
+
+For the triangle inequality, use the Cauchy-Schwarz inequality:
+
+$$
+\left|\sum_{i=1}^{n} a_i b_i\right|
+\leq
+\left(\sum_{i=1}^{n} a_i^2\right)^{1/2}
+\left(\sum_{i=1}^{n} b_i^2\right)^{1/2}.
+$$
+
+### Positivity
+
+> **Your answer:**
+>
+> *(write here)*
+
+### Homogeneity
+
+> **Your answer:**
+>
+> *(write here)*
+
+### Triangle inequality
+
+> **Your answer:**
+>
+> *(write here)*
+
+---
+
+## 3. Proof for $\ell^\infty$
+
+### Positivity
+
+> **Your answer:**
+>
+> *(write here)*
+
+### Homogeneity
+
+> **Your answer:**
+>
+> *(write here)*
+
+### Triangle inequality
+
+> **Your answer:**
+>
+> *(write here)*
