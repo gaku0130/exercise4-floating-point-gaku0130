@@ -71,7 +71,29 @@ def verify_norm_inequalities(n_dims, n_tests=100, seed=2026):
     # 3. Check inequalities (5), (6), and (7).
     # 4. Return True only if all tests pass.
 
-    pass
+    import numpy as np
+from numpy import linalg as LA
+
+def verify_norm_inequalities(n_dims, n_tests=100, seed=2026):
+    rng = np.random.default_rng(seed)
+
+    tol = 1e-12
+
+    for _ in range(n_tests):
+        x = rng.normal(size=n_dims)
+
+        norm_1 = LA.norm(x, 1)
+        norm_2 = LA.norm(x, 2)
+        norm_inf = LA.norm(x, np.inf)
+
+        cond_5 = norm_2 <= norm_1 + tol and norm_1 <= np.sqrt(n_dims) * norm_2 + tol
+        cond_6 = norm_inf <= norm_1 + tol and norm_1 <= n_dims * norm_inf + tol
+        cond_7 = norm_inf <= norm_2 + tol and norm_2 <= np.sqrt(n_dims) * norm_inf + tol
+
+        if not (cond_5 and cond_6 and cond_7):
+            return False
+
+    return True
 ```
 
 ---
@@ -86,8 +108,11 @@ Run your function for several dimensions and report the result.
 # for n in [2, 5, 10, 50]:
 #     ok = verify_norm_inequalities(n_dims=n, n_tests=1000)
 #     print(n, ok)
-```
 
+for n in [2, 5, 10, 50]:
+    ok = verify_norm_inequalities(n_dims=n, n_tests=1000)
+    print(f"n = {n}: all tests passed = {ok}")
+```
 ---
 
 ## 3. Explanation
@@ -96,11 +121,11 @@ Explain what your numerical experiment confirms.
 
 > **Your answer:**
 >
-> *(write here)*
+> The numerical experiment confirms that the inequalities between \(\ell^1\), \(\ell^2\), and \(\ell^\infty\) norms hold for many randomly generated vectors. For each tested dimension, all random vectors satisfied inequalities (5), (6), and (7).
 
 Also explain why a numerical experiment is useful even though it is not a
 mathematical proof.
 
 > **Your answer:**
 >
-> *(write here)*
+> A numerical experiment is useful because it helps us check whether our understanding and implementation are correct. However, it is not a mathematical proof because it only tests finitely many examples, while the inequalities must hold for all vectors in \(\mathbb{R}^n\).
