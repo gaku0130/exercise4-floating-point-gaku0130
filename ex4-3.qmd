@@ -76,6 +76,31 @@ def estimate_induced_norm(A, p, n_samples=1000, seed=2026):
     # 4. Return (estimate, best_x).
 
     pass
+
+import numpy as np
+from numpy import linalg as LA
+
+def estimate_induced_norm(A, p, n_samples=1000, seed=2026):
+    rng = np.random.default_rng(seed)
+    A = np.asarray(A, dtype=float)
+    n = A.shape[1]
+
+    best_ratio = -np.inf
+    best_x = None
+
+    for _ in range(n_samples):
+        x = rng.normal(size=n)
+
+        if LA.norm(x, p) == 0:
+            continue
+
+        ratio = LA.norm(A @ x, p) / LA.norm(x, p)
+
+        if ratio > best_ratio:
+            best_ratio = ratio
+            best_x = x
+
+    return best_ratio, best_x
 ```
 
 ---
@@ -98,13 +123,36 @@ A2 = np.array([
 
 # TODO: run estimate_induced_norm(A, p, n_samples=...)
 # and compare with LA.norm(A, ord=p).
+
+A1 = np.array([
+    [2.0, 1.0],
+    [0.0, 1.0],
+])
+
+A2 = np.array([
+    [1.0, -2.0, 0.0],
+    [3.0,  4.0, -1.0],
+    [0.0,  2.0, 5.0],
+])
+
+matrices = {"A1": A1, "A2": A2}
+ps = [1, 2, np.inf]
+
+for name, A in matrices.items():
+    print(f"\n{name} =")
+    print(A)
+    for p in ps:
+        estimate, best_x = estimate_induced_norm(A, p, n_samples=10000)
+        true_value = LA.norm(A, ord=p)
+        gap = (true_value - estimate) / true_value
+        print(f"p = {p}: estimate = {estimate:.6f}, true = {true_value:.6f}, relative gap = {gap:.6f}")
 ```
 
 Create a small table with your results.
 
 > **Your table / summary:**
 >
-> *(write here)*
+>The random search estimates were always less than or equal to the true induced matrix norm. For both matrices, the estimates became reasonably close to the true values, especially when many random vectors were sampled.
 
 ---
 
@@ -114,6 +162,14 @@ For one $2 \times 2$ matrix, try several sample sizes, for example:
 
 ```{python}
 sample_sizes = [10, 100, 1000, 10000]
+A = A1
+p = 2
+true_value = LA.norm(A, ord=p)
+
+for N in sample_sizes:
+    estimate, best_x = estimate_induced_norm(A, p, n_samples=N, seed=2026)
+    gap = (true_value - estimate) / true_value
+    print(f"N = {N}: estimate = {estimate:.6f}, true = {true_value:.6f}, relative gap = {gap:.6f}")
 ```
 
 For each sample size, report:
@@ -128,7 +184,7 @@ For each sample size, report:
 
 > **Your table / summary:**
 >
-> *(write here)*
+>For the \(2 \times 2\) matrix \(A_1\), increasing the sample size generally made the sampled maximum closer to the true value. This is because more random vectors give a better chance of finding a direction close to the maximum stretching direction.
 
 ---
 
@@ -139,13 +195,13 @@ equal? Explain your answer.
 
 > **Your answer:**
 >
-> *(write here)*
+> The sampled maximum is below or equal to the true matrix norm. This is because the true induced norm is the maximum over all nonzero vectors, while random search only tests finitely many vectors.
 
 Discuss why one case is close and another case is not.
 
 > **Your answer:**
 >
-> *(write here)*
+>Some cases are close because the random samples happen to include a vector near the best stretching direction. Other cases are not close because the best direction may be hard to sample randomly, especially in higher dimensions or with small sample sizes.
 
 ---
 
@@ -171,5 +227,40 @@ Tasks:
 ```
 
 > **Optional challenge answer:**
->
-> *(write here)*
+>For \(p = 2\), do the following extra analysis for one \(2 \times 2\) matrix:
+
+$$
+\|A\|_2 = \sqrt{\lambda_{\max}(A^T A)}.
+$$
+
+```{python}
+A = A1
+
+B = A.T @ A
+eigenvalues, eigenvectors = LA.eig(B)
+
+idx = np.argmax(eigenvalues)
+lambda_max = eigenvalues[idx]
+v_max = eigenvectors[:, idx]
+
+norm_2_from_eigenvalue = np.sqrt(lambda_max)
+norm_2_numpy = LA.norm(A, ord=2)
+
+stretch_ratio = LA.norm(A @ v_max, 2) / LA.norm(v_max, 2)
+
+estimate, best_x = estimate_induced_norm(A, p=2, n_samples=10000, seed=2026)
+
+print("A =")
+print(A)
+print("A.T @ A =")
+print(B)
+print("lambda_max =", lambda_max)
+print("sqrt(lambda_max) =", norm_2_from_eigenvalue)
+print("numpy ||A||_2 =", norm_2_numpy)
+print("v_max =", v_max)
+print("stretch ratio for v_max =", stretch_ratio)
+print("best random direction =", best_x / LA.norm(best_x, 2))
+print("v_max direction =", v_max / LA.norm(v_max, 2))
+```
+
+>For \(p=2\), the matrix norm can be computed from the largest eigenvalue of \(A^T A\). In this experiment, \(\sqrt{\lambda_{\max}(A^T A)}\) matched `numpy.linalg.norm(A, ord=2)`. The eigenvector corresponding to \(\lambda_{\max}\) gave the same stretch ratio, so it represents the direction of maximum stretching. The best random-search direction was close to this eigenvector when the sample size was large, but it was not exactly the same because random search only tests finitely many directions.
